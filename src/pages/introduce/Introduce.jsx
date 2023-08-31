@@ -109,7 +109,7 @@ const Introduce = () => {
   const navigate = useNavigate();
   const startQuiz = () => {
     if (difficultyChange) {
-      navigate(`/quiz/${category}/${difficultyChange}/${TOTAL_QUESTIONS}`);
+      navigate(`/quiz/${difficultyChange}/${TOTAL_QUESTIONS}`);
     }
   };
   return (
@@ -117,7 +117,7 @@ const Introduce = () => {
       <div className="m-10 flex flex-col  md:flex-row lg:flex-row">
         <div>
           <img
-            className="  w-[40%] h-[40%]  mb-8 ml-24 rounded-lg"
+            className="  w-[40%] h-[40%]  mb-8 ml-24 rounded-lg md:w-[60%] md:h-[60%] lg:w-[60%] l:h-[60%]"
             src={Logo}
             alt=""
           />

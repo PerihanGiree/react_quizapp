@@ -22,28 +22,30 @@ const Quiz = () => {
   }, []);
   console.log("Sorular:", questionsData);
   return (
-    <div className="flex">
-      {loading ? (
-        <div className=" flex   w-full h-[100vh] items-center justify-center bg-purple-700 ">
-          <LoadingIcons.Circles />
-        </div>
-      ) : (
-        <div className="w-[100%] h-[100vh] bg-purple-400 flex items-center justify-center">
-          {modal ? (
-            <Modal score={score} />
-          ) : (
-            <QuestionCard
-              questionsData={questionsData}
-              score={score}
-              count={count}
-              modal={modal}
-              setScore={setScore}
-              setCount={setCount}
-              setModal={setModal}
-            />
-          )}
-        </div>
-      )}
+    <div className=" flex flex-col bg-purple-600 w-full h-[100vh]">
+      <div className=" flex m-10 justify-center items-center ">
+        {loading ? (
+          <div className="flex justify-center items-center mt-40   ">
+            <LoadingIcons.Circles />
+          </div>
+        ) : (
+          <div className=" flex w-full h-full justify-center">
+            {modal ? (
+              <Modal score={score} />
+            ) : (
+              <QuestionCard
+                questionsData={questionsData}
+                score={score}
+                count={count}
+                modal={modal}
+                setScore={setScore}
+                setCount={setCount}
+                setModal={setModal}
+              />
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
