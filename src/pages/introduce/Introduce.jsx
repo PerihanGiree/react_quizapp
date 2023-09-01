@@ -102,9 +102,8 @@ const Introduce = () => {
       name: "Cartoon & Animations",
     },
   ];
-  const TOTAL_QUESTIONS = 10;
+  const TOTAL_QUESTIONS = 20;
   const [difficultyChange, setDifficultyChange] = useState("");
-  const [category, setCategory] = useState("");
 
   const navigate = useNavigate();
   const startQuiz = () => {
@@ -112,6 +111,7 @@ const Introduce = () => {
       navigate(`/quiz/${difficultyChange}/${TOTAL_QUESTIONS}`);
     }
   };
+
   return (
     <div className=" flex flex-col w-full h-[100vh] justify-center items-center   md:flex-row lg:flex-row  bg-fuchsia-400 ">
       <div className="m-10 flex flex-col  md:flex-row lg:flex-row">
@@ -124,20 +124,14 @@ const Introduce = () => {
         </div>
 
         <div className="">
-          <div className=" ">
+          <p className="font-bold m-2"> Player One</p>
+          <div className="flex flex-col  md:flex-row lg:flex-row ">
             <Dropdown
               data={difficulty}
               setDifficultyChange={setDifficultyChange}
             />
           </div>
-          {/* <Dropdown
-    data={categoryList.map((isim) => {
-      return isim.name;
-    })}
-    setCategory={setCategory.map((id) => {
-      return id.id;
-    })}
-  /> */}
+
           <div
             onClick={startQuiz}
             className="flex  text-white w-[84%] h-[40%] p-2 justify-center items-center rounded-md bg-blue-600 sm:w-[350px] lg:h-[50px] md:w-[350px] md:h-[50px] lg:w-[350px] lg:[50px]"

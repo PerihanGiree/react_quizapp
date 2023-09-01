@@ -23,6 +23,7 @@ const QuestionCard = ({
     if (count == 9) {
       setModal(true);
     }
+
     setTimer(30);
   };
 
