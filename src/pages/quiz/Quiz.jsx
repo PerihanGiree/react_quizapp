@@ -1,23 +1,32 @@
+// Quiz.js
+
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import * as api from "../../api/api";
-import QuestionCard from "../../components/questionCard/QuestionCard";
-import Modal from "../../components/modal/Modal";
+import QuestionCard from "../../components/questionCard/QuestionCard"; // QuestionCard bileşenini uygun şekilde import edin
+import Modal from "../../components/modal/Modal"; // Modal bileşenini uygun şekilde import edin
 import LoadingIcons from "react-loading-icons";
+import * as api from "../../api/api"; // API işlemleri için uygun şekilde import edin
+
 const Quiz = () => {
-  const { difficulty, amount } = useParams();
-  //  const [difficulty, setDifficulty] = useState("");
+  const { difficulty } = useParams();
   const [questionsData, setQuestionsData] = useState([]);
-  const [player1OuestionsData, setPlayer1QuestionsData] = useState([]);
+  const [activePlayer, setActivePlayer] = useState("player1");
+  const [player1QuestionsData, setPlayer1QuestionsData] = useState([]);
   const [player2QuestionsData, setPlayer2QuestionsData] = useState([]);
   const [score1, setScore1] = useState(0);
   const [score2, setScore2] = useState(0);
   const [count, setCount] = useState(0);
   const [modal, setModal] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  // switchPlayer fonksiyonu, oyuncu değişimini sağlar
+  const switchPlayer = () => {
+    setActivePlayer(activePlayer === "player1" ? "player2" : "player1");
+  };
+
   useEffect(() => {
     const getData = async () => {
-      const data = await api.fetchQuizData(difficulty, amount);
+      const data = await api.fetchQuizData(difficulty, 20);
       setQuestionsData(data);
       setPlayer1QuestionsData(data.slice(0, 10));
       setPlayer2QuestionsData(data.slice(10, 20));
@@ -26,55 +35,36 @@ const Quiz = () => {
 
     getData();
   }, []);
-  console.log("Sorular:", questionsData);
-  console.log("1.", player1OuestionsData);
-  console.log("2.", player2QuestionsData);
+  console.log(questionsData);
+  console.log("1", player1QuestionsData);
+  console.log("2", player2QuestionsData);
   return (
-    <div className=" flex flex-row">
-      <div className=" flex flex-col bg-purple-600 w-full h-[100vh]">
-        <div className=" flex m-10 justify-center items-center ">
+    <div className="flex flex-row">
+      <div className="flex flex-col bg-purple-600 w-full h-[100vh]">
+        <div className="flex m-10 justify-center items-center">
           {loading ? (
-            <div className="flex justify-center items-center mt-40   ">
+            <div className="flex justify-center items-center mt-40">
               <LoadingIcons.Circles />
             </div>
           ) : (
-            <div className=" flex w-full h-full justify-center">
+            <div className="flex w-full h-full justify-center">
               {modal ? (
-                <Modal score={score1} />
+                <Modal score={activePlayer === "player1" ? score1 : score2} />
               ) : (
                 <QuestionCard
-                  questionsData={player1OuestionsData}
-                  score={score1}
+                  title={activePlayer === "player1" ? "PLAYER1" : "PLAYER2"}
+                  questionsData={
+                    activePlayer === "player1"
+                      ? player1QuestionsData
+                      : player2QuestionsData
+                  }
+                  score={activePlayer === "player1" ? score1 : score2}
                   count={count}
                   modal={modal}
-                  setScore={setScore1}
+                  setScore={activePlayer === "player1" ? setScore1 : setScore2}
                   setCount={setCount}
                   setModal={setModal}
-                />
-              )}
-            </div>
-          )}
-        </div>
-      </div>
-      <div className=" flex flex-col bg-purple-600 w-full h-[100vh]">
-        <div className=" flex m-10 justify-center items-center ">
-          {loading ? (
-            <div className="flex justify-center items-center mt-40   ">
-              <LoadingIcons.Circles />
-            </div>
-          ) : (
-            <div className=" flex w-full h-full justify-center">
-              {modal ? (
-                <Modal score={score2} />
-              ) : (
-                <QuestionCard
-                  questionsData={player2QuestionsData}
-                  score={score2}
-                  count={count}
-                  modal={modal}
-                  setScore={setScore2}
-                  setCount={setCount}
-                  setModal={setModal}
+                  switchPlayer={switchPlayer}
                 />
               )}
             </div>
