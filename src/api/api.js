@@ -3,7 +3,7 @@ const suffleArray = (array) => {
 };
 
 export const fetchQuizData = async (difficulty, amount) => {
-  const url = `https://opentdb.com/api.php?amount=${amount}&category=18&difficulty=${difficulty}`;
+  const url = `https://opentdb.com/api.php?amount=${amount}&category=11&difficulty=${difficulty}`;
 
   const data = await (await fetch(url)).json();
 
