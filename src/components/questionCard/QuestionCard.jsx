@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import "./QuestionCard.css";
 
@@ -14,33 +15,63 @@ const QuestionCard = ({
   activePlayer,
   switchPlayer,
 }) => {
-  const [timer, setTimer] = useState(30);
+  const [timer, setTimer] = useState(10);
+  const [isEndTimer, setIsEndTimer] = useState(false);
+  const [myInterval, setMyInterval] = useState(null);
 
   const selectedAnswer = (e) => {
     const selectedOption = e.currentTarget.value;
     const isCorrect = selectedOption === questionsData[count]?.correct_answer;
-
     handleAnswer(isCorrect);
+    setIsEndTimer(true);
   };
 
+  // create timer
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (timer > 0) {
-        setTimer(timer - 1);
-      }
-
-      if (timer === 0 && count < 9) {
-        switchPlayer();
-        setTimer(30);
-      } else if (count >= 9) {
-        setModal(true);
-      }
-    }, 1000);
+    if(!isEndTimer){
+      console.log("timer yeniden 10 oldu");
+      setTimer(10);
+    } else {
+      console.log("eski timer kapatıldı ",myInterval);
+      clearInterval(myInterval);
+      setInterval(null);
+      setIsEndTimer(false);
+    }
 
     return () => {
-      clearInterval(interval);
-    };
-  }, [timer, count, setModal, switchPlayer]);
+      console.log("interval kapatıldı component");
+      setInterval(null);
+      clearInterval(myInterval);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEndTimer]);
+
+  useEffect(() => {
+    if(timer === 0){
+      handleAnswer(false);
+      switchPlayer();
+      setIsEndTimer(true);
+    }
+    // soru değişti - yeni soru için yeni sayaç
+    if(timer === 10){
+      console.log("interval açıldı");
+      setMyInterval(
+        setInterval(() => {
+          if (timer > 0) {
+            setTimer((prev) => prev - 1);
+          }
+          console.log("intervall", timer);
+        }, 1000)
+      )
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[timer]);
+
+  useEffect(() => {
+    if(count > 9){
+      setModal(true);
+    }
+  },[count])
 
   return (
     <div className="flex flex-col w-[100%] h-[100%] bg-pink-400 shadow-pink-700 shadow-inner">
@@ -51,7 +82,7 @@ const QuestionCard = ({
           </div>
         </div>
         <div className="font-bold">{title}</div>
-        <div className="flex w-[80%] h-[30%] bg-pink-950 rounded-md mb-3 mt-4 justify-center items-center p-2 m-10 text-white font-bold">
+        <div className="flex w-[80%] h-[10%] bg-pink-950 rounded-md mb-3 mt-4 justify-center items-center p-2 m-10 text-white font-bold">
           {questionsData && questionsData[count]?.question}
         </div>
         {questionsData &&

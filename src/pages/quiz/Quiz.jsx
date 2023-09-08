@@ -6,7 +6,7 @@ import LoadingIcons from "react-loading-icons";
 import * as api from "../../api/api";
 
 const Quiz = () => {
-  const { difficulty } = useParams();
+  const { difficulty, amount } = useParams();
   const [questionsData, setQuestionsData] = useState([]);
   const [scorePlayer1, setScorePlayer1] = useState(0);
   const [scorePlayer2, setScorePlayer2] = useState(0);
@@ -17,13 +17,13 @@ const Quiz = () => {
 
   useEffect(() => {
     const getData = async () => {
-      const data = await api.fetchQuizData(difficulty, 20);
+      const data = await api.fetchQuizData(difficulty, amount);
       setQuestionsData(data);
       setLoading(false);
     };
 
     getData();
-  }, [difficulty]);
+  }, [difficulty, amount]);
 
   const switchPlayer = () => {
     setActivePlayer(activePlayer === "player1" ? "player2" : "player1");
@@ -74,6 +74,7 @@ const Quiz = () => {
                   count={count}
                   setCount={setCount}
                   modal={modal}
+                  setModal={setModal}
                   handleAnswer={handleAnswer}
                   activePlayer={activePlayer}
                   switchPlayer={switchPlayer}
